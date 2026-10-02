@@ -215,3 +215,8 @@ A validação deixou de ser apenas técnica: o comportamento foi observado em um
 
 `POC-KAME-EYE-002C_IrisGaze_Numb_Lifeless.ino` é a cópia versionada do código-base funcional.
 
+---
+
+### 🤖 Human Designed. AI Assisted.
+
+This project was designed and developed by humans with the assistance of artificial intelligence. Technical decisions, experimentation, validation and final implementation remained under human direction.
