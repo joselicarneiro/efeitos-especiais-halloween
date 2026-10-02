@@ -165,6 +165,46 @@ A sequência é:
 
 **Não alterar essa sequência dentro da versão congelada.**
 
+## O caso do resistor R8 — uma descoberta importante
+
+Durante a investigação do controle individual dos dois GC9A01, chegamos muito perto de remover o resistor **R8** de uma das placas para verificar se isso permitiria utilizar o **CS** de forma convencional, deixando cada display completamente independente no barramento SPI.
+
+Foi justamente aí que surgiu uma informação importante para quem encontrar o mesmo tipo de módulo.
+
+O R8 estava identificado na placa como:
+
+- **R8-CS**;
+- marcação **513** (aproximadamente 51 kΩ);
+- indicação em chinês de **resistor de pull-down**;
+- indicação de que o módulo pode operar sem conexão externa de CS/RST.
+
+Na prática, esse pull-down mantém o **CS em LOW** quando o pino externo não está sendo dirigido. Como o CS do GC9A01 é **ativo em LOW**, isso significa que o display permanece selecionado por padrão.
+
+Um teste foi particularmente esclarecedor: com os fios físicos de CS desconectados, **os dois displays continuaram recebendo a inicialização e apareceram azuis**. Isso mostrou que o comportamento não dependia simplesmente de o fio do CS estar conectado ao ESP32 — o próprio módulo estava mantendo o CS em LOW através do R8.
+
+A conclusão foi importante:
+
+> **Não era necessário remover o R8 para obter controle individual dos displays.**
+
+O caminho validado foi manter o hardware original e controlar os CS pelo ESP32:
+
+- CS LOW → display selecionado;
+- CS HIGH → display deselecionado;
+- durante a inicialização, manter a combinação de CS utilizada pelo 002C;
+- depois da inicialização, controlar os displays individualmente.
+
+Por isso, **R8 não deve ser removido como parte da solução validada**.
+
+### Por que documentar isso?
+
+Porque a tentação de remover o resistor é bastante natural quando se encontra dois GC9A01 com comportamento aparentemente estranho no CS.
+
+Neste projeto, porém, remover o componente teria significado modificar o hardware antes de compreender completamente o circuito.
+
+A investigação mostrou que o pull-down fazia parte do comportamento do módulo e que era possível trabalhar com ele intacto.
+
+**Lição prática:** antes de modificar a placa, vale investigar o circuito de CS do módulo e testar seu comportamento com o GPIO explicitamente em LOW e HIGH.
+
 ## Resultado
 
 Maria Joaquina foi instalada no Arthuween 2026 e fez muito sucesso com o público.
