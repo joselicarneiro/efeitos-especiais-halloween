@@ -94,3 +94,9 @@ Os códigos são registros de versões de desenvolvimento e validação de um pr
 ## 🎃 Resultado
 
 O Arthuween deixou de ser apenas uma coleção de POCs e se tornou um experimento completo envolvendo **engenharia, cenografia, software, hardware, comportamento procedural e experiência humana**.
+
+---
+
+### 🤖 Human Designed. AI Assisted.
+
+This project was designed and developed by humans with the assistance of artificial intelligence. Technical decisions, experimentation, validation and final implementation remained under human direction.
