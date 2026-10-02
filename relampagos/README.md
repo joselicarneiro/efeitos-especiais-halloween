@@ -163,3 +163,8 @@ A versão registrada neste repositório é:
 
 Ela preserva a versão que contém o comportamento de tempestades intensas utilizado durante os testes finais.
 
+---
+
+### 🤖 Human Designed. AI Assisted.
+
+This project was designed and developed by humans with the assistance of artificial intelligence. Technical decisions, experimentation, validation and final implementation remained under human direction.
