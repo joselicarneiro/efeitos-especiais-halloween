@@ -1,219 +1,219 @@
-# 💀 Maria Joaquina — Olhos da Caveira
+# 💀 Maria Joaquina — Skull Eyes
 
-## O que é?
+## What is it?
 
-Maria Joaquina é a caveira cenográfica do Arthuween 2026.
+Maria Joaquina is the scenic skull from Arthuween 2026.
 
-Seus olhos foram construídos com:
+Its eyes were built with:
 
 - ESP32-S3 DevKit;
-- 2 × displays circulares GC9A01;
-- aproximadamente 1,28";
-- resolução de 240 × 240;
-- displays instalados atrás de óculos escuros.
+- 2 × circular GC9A01 displays;
+- approximately 1.28";
+- 240 × 240 resolution;
+- displays installed behind dark glasses.
 
-Os óculos escondem as placas e os fios, fazendo com que o que apareça para o público seja simplesmente um par de olhos dentro da caveira.
+The glasses hide the boards and wires, so what the audience sees is simply a pair of eyes inside the skull.
 
-## A ideia principal
+## The main idea
 
-Os olhos não são vídeos.
+The eyes are not videos.
 
-Eles são **gerados em tempo real**.
+They are **generated in real time**.
 
-Cada olho é composto por círculos:
+Each eye is composed of circles:
 
 ```
 ┌─────────────────────────┐
 │                         │
-│       ESCLERA           │
+│       SCLERA            │
 │          ●              │
-│       ÍRIS +            │
-│       PUPILA            │
+│       IRIS +            │
+│       PUPIL             │
 │                         │
 └─────────────────────────┘
 ```
 
-A unidade que se movimenta é a **íris inteira**:
+The moving unit is the **entire iris**:
 
-**anel externo + íris + pupila**
+**outer ring + iris + pupil**
 
-A pupila permanece centralizada em relação à íris.
+The pupil remains centered relative to the iris.
 
-Isso produz um movimento visual muito mais simples e coerente do que tentar movimentar cada elemento separadamente.
+This produces a much simpler and more coherent visual movement than trying to move each element independently.
 
-## Baseline congelado
+## Frozen baseline
 
-A referência funcional é:
+The functional reference is:
 
 **POC-KAME-EYE-002C — IRIS GAZE + NUMB / LIFELESS**
 
-Parâmetros validados:
+Validated parameters:
 
-| Parâmetro | Valor |
+| Parameter | Value |
 |---|---:|
-| Centro X | 120 |
-| Centro Y | 120 |
-| Esclera | 105 |
-| Anel externo | 65 |
-| Íris | 55 |
-| Pupila | 25 |
+| Center X | 120 |
+| Center Y | 120 |
+| Sclera | 105 |
+| Outer ring | 65 |
+| Iris | 55 |
+| Pupil | 25 |
 | Buffer | 201 × 201 |
 | Buffer X | 20 |
 | Buffer Y | 20 |
 
-Posições de olhar:
+Gaze positions:
 
-- esquerda = 90
-- centro = 120
-- direita = 150
-- cima = 90
-- baixo = 150
+- left = 90
+- center = 120
+- right = 150
+- up = 90
+- down = 150
 
-O framebuffer utiliza RGB565 e é enviado aos dois displays com `pushImage()`.
+The framebuffer uses RGB565 and is sent to both displays with `pushImage()`.
 
-## Como o movimento funciona
+## How the movement works
 
-O movimento não pula de uma posição para outra.
+The movement does not jump from one position to another.
 
-O código usa uma curva de suavização:
+The code uses a smoothing curve:
 
 ```
 t² × (3 - 2t)
 ```
 
-Isso produz um movimento de entrada e saída suave.
+This produces smooth ease-in/ease-out movement.
 
-A sequência normal inclui:
+The normal sequence includes:
 
-- centro → cima → centro;
-- centro → baixo → centro;
-- centro → esquerda → centro;
-- centro → direita → centro;
-- centro → cima-esquerda → centro;
-- centro → baixo-direita → centro.
+- center → up → center;
+- center → down → center;
+- center → left → center;
+- center → right → center;
+- center → upper-left → center;
+- center → lower-right → center.
 
 ## NUMB / LIFELESS
 
-De vez em quando, o olho entra em um estado diferente.
+From time to time, the eye enters a different state.
 
-Nesse estado:
+In this state:
 
-- a íris continua visível;
-- o olhar fica lento/minimalista;
-- a pupila fica cinza-clara;
-- depois de alguns segundos o olho retorna ao comportamento normal.
+- the iris remains visible;
+- the gaze becomes slow/minimal;
+- the pupil becomes light gray;
+- after a few seconds, the eye returns to normal behavior.
 
-No arquivo-base 002C:
+In the 002C baseline:
 
 - chance: 3%;
-- duração: aproximadamente 2,5–5 segundos.
+- duration: approximately 2.5–5 seconds.
 
-Durante os testes, 15% também foi experimentado, mas o arquivo-base congelado permanece com 3%.
+During testing, 15% was also experimented with, but the frozen baseline remains at 3%.
 
-## Uma decisão importante: autonomia
+## An important decision: autonomy
 
-Foram considerados sensores HC-SR04 para detectar pessoas e alterar o comportamento dos olhos.
+HC-SR04 sensors were considered to detect people and change the eyes' behavior.
 
-Essa ideia foi retirada do escopo do Arthuween.
+That idea was removed from the Arthuween scope.
 
-Maria Joaquina funciona de maneira **autônoma**.
+Maria Joaquina works **autonomously**.
 
-Os sensores ficaram disponíveis para experimentos futuros.
+The sensors remain available for future experiments.
 
-## Abordagens que foram descartadas
+## Approaches that were discarded
 
-### Rastreamento de pessoas
+### Person tracking
 
-Retirado do projeto final.
+Removed from the final project.
 
 ### Blink
 
-Não utilizado porque a caveira não possui pálpebras.
+Not used because the skull has no eyelids.
 
-### Animação por imagens
+### Image-based animation
 
-Rejeitada. O comportamento dos olhos deve permanecer procedural.
+Rejected. The eye behavior should remain procedural.
 
 ### LGFX_Sprite
 
-Foi testado e provocou `StoreProhibited`. Não faz parte da solução validada.
+It was tested and caused `StoreProhibited`. It is not part of the validated solution.
 
 ### readRect()
 
-Foi testado, mas o driver estava configurado com `readable=false`. Não foi utilizado como estratégia de framebuffer.
+It was tested, but the driver was configured with `readable=false`. It was not used as a framebuffer strategy.
 
-### Redesenhar a tela inteira
+### Redrawing the entire screen
 
-Provocava flicker durante o movimento.
+This caused flicker during movement.
 
-A solução validada utiliza um framebuffer local e `pushImage()`.
+The validated solution uses a local framebuffer and `pushImage()`.
 
-## Um detalhe crítico do hardware
+## A critical hardware detail
 
-Os dois GC9A01 utilizam CS compartilhado no barramento SPI.
+The two GC9A01 displays use shared CS on the SPI bus.
 
-A inicialização validada do 002C deve ser preservada.
+The validated 002C initialization sequence must be preserved.
 
-A sequência é:
+The sequence is:
 
-1. CS esquerdo em LOW;
-2. inicialização através de `rightDisplay.init()`;
-3. rotação esquerda = 0;
-4. rotação direita = 2;
-5. desenho nos dois displays;
-6. ambos os CS em HIGH.
+1. left CS LOW;
+2. initialize through `rightDisplay.init()`;
+3. left rotation = 0;
+4. right rotation = 2;
+5. draw on both displays;
+6. set both CS pins HIGH.
 
-**Não alterar essa sequência dentro da versão congelada.**
+**Do not change this sequence inside the frozen version.**
 
-## O caso do resistor R8 — uma descoberta importante
+## The R8 resistor case — an important discovery
 
-Durante a investigação do controle individual dos dois GC9A01, chegamos muito perto de remover o resistor **R8** de uma das placas para verificar se isso permitiria utilizar o **CS** de forma convencional, deixando cada display completamente independente no barramento SPI.
+During the investigation of individual control of the two GC9A01 displays, we came very close to removing resistor **R8** from one of the boards to find out whether that would allow CS to be used conventionally, making each display completely independent on the SPI bus.
 
-Foi justamente aí que surgiu uma informação importante para quem encontrar o mesmo tipo de módulo.
+That was when an important piece of information emerged for anyone who encounters the same type of module.
 
-O R8 estava identificado na placa como:
+R8 was identified on the board as:
 
 - **R8-CS**;
-- marcação **513** (aproximadamente 51 kΩ);
-- indicação em chinês de **resistor de pull-down**;
-- indicação de que o módulo pode operar sem conexão externa de CS/RST.
+- marking **513** (approximately 51 kΩ);
+- a Chinese marking indicating a **pull-down resistor**;
+- an indication that the module can operate without an external CS/RST connection.
 
-Na prática, esse pull-down mantém o **CS em LOW** quando o pino externo não está sendo dirigido. Como o CS do GC9A01 é **ativo em LOW**, isso significa que o display permanece selecionado por padrão.
+In practice, this pull-down keeps **CS LOW** when the external pin is not being driven. Since GC9A01 CS is **active LOW**, the display remains selected by default.
 
-Um teste foi particularmente esclarecedor: com os fios físicos de CS desconectados, **os dois displays continuaram recebendo a inicialização e apareceram azuis**. Isso mostrou que o comportamento não dependia simplesmente de o fio do CS estar conectado ao ESP32 — o próprio módulo estava mantendo o CS em LOW através do R8.
+One test was particularly revealing: with the physical CS wires disconnected, **both displays continued to receive initialization and appeared blue**. This showed that the behavior did not simply depend on the CS wire being connected to the ESP32 — the module itself was keeping CS LOW through R8.
 
-A conclusão foi importante:
+The conclusion was important:
 
-> **Não era necessário remover o R8 para obter controle individual dos displays.**
+> **Removing R8 was not necessary to obtain individual display control.**
 
-O caminho validado foi manter o hardware original e controlar os CS pelo ESP32:
+The validated approach was to keep the original hardware and control CS from the ESP32:
 
-- CS LOW → display selecionado;
-- CS HIGH → display deselecionado;
-- durante a inicialização, manter a combinação de CS utilizada pelo 002C;
-- depois da inicialização, controlar os displays individualmente.
+- CS LOW → display selected;
+- CS HIGH → display deselected;
+- during initialization, preserve the CS combination used by 002C;
+- after initialization, control the displays individually.
 
-Por isso, **R8 não deve ser removido como parte da solução validada**.
+Therefore, **R8 should not be removed as part of the validated solution**.
 
-### Por que documentar isso?
+### Why document this?
 
-Porque a tentação de remover o resistor é bastante natural quando se encontra dois GC9A01 com comportamento aparentemente estranho no CS.
+Because removing the resistor is a very natural idea when two GC9A01 modules exhibit apparently strange CS behavior.
 
-Neste projeto, porém, remover o componente teria significado modificar o hardware antes de compreender completamente o circuito.
+In this project, however, removing the component would have meant modifying the hardware before fully understanding the circuit.
 
-A investigação mostrou que o pull-down fazia parte do comportamento do módulo e que era possível trabalhar com ele intacto.
+The investigation showed that the pull-down was part of the module's behavior and that it was possible to work with it intact.
 
-**Lição prática:** antes de modificar a placa, vale investigar o circuito de CS do módulo e testar seu comportamento com o GPIO explicitamente em LOW e HIGH.
+**Practical lesson:** before modifying the board, investigate the module's CS circuit and test its behavior with the GPIO explicitly driven LOW and HIGH.
 
-## Resultado
+## Result
 
-Maria Joaquina foi instalada no Arthuween 2026 e fez muito sucesso com o público.
+Maria Joaquina was installed at Arthuween 2026 and was a big hit with the audience.
 
-A validação deixou de ser apenas técnica: o comportamento foi observado em uma instalação cenográfica real.
+Validation was no longer limited to the technical side: the behavior was observed in a real scenic installation.
 
-## Código
+## Code
 
-`POC-KAME-EYE-002C_IrisGaze_Numb_Lifeless.ino` é a cópia versionada do código-base funcional.
+`POC-KAME-EYE-002C_IrisGaze_Numb_Lifeless.ino` is the versioned copy of the functional baseline code.
 
 ---
 
