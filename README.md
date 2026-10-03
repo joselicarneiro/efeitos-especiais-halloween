@@ -1,76 +1,76 @@
-# 🎃 Efeitos Especiais para Festas de Halloween
+# 🎃 Special Effects for Halloween Parties
 
-Projetos eletrônicos desenvolvidos e testados para criar efeitos especiais de Halloween com hardware acessível, software procedural e muita experimentação.
+Electronic projects developed and tested to create Halloween special effects using accessible hardware, procedural software, and plenty of experimentation.
 
-Este repositório registra parte do trabalho realizado no **Arthuween 2026**, incluindo duas experiências principais:
+This repository documents part of the work carried out for **Arthuween 2026**, including two main experiences:
 
-- ⚡ **Lightning Engine** — uma tempestade de relâmpagos usando Arduino Uno e fitas WS2812B.
-- 💀 **Maria Joaquina** — uma caveira cenográfica com dois olhos animados usando ESP32-S3 e displays GC9A01.
+- ⚡ **Lightning Engine** — a lightning storm using Arduino Uno and WS2812B LED strips.
+- 💀 **Maria Joaquina** — a scenic skull with animated eyes using an ESP32-S3 and GC9A01 displays.
 
-O objetivo não é apenas disponibilizar código. A documentação registra também as ideias, decisões, testes, problemas encontrados e versões que foram consideradas válidas.
+The goal is not simply to publish code. The documentation also records ideas, decisions, tests, problems encountered, and versions that were considered valid.
 
 ## ⚡ Lightning Engine
 
-A máquina de relâmpagos foi concebida como uma **tempestade procedural autônoma**, e não como um simples pisca-pisca.
+The lightning machine was designed as an **autonomous procedural storm**, rather than a simple blinking-light effect.
 
-Ela trabalha com:
+It works with:
 
-- 2 Arduino Uno;
-- 2 fitas WS2812B de 60 LEDs;
-- 120 LEDs no total;
-- D7 para a fita A e D8 para a fita B;
-- fonte de 12 V / 3,33 A;
-- LM2596S ajustado para aproximadamente 5,02 V;
-- caminhos lógicos separados da posição física dos LEDs;
-- intensidade, duração, propagação, ramificação e múltiplos picos;
-- ciclo de vida da tempestade: `SILENCE → RISING → DEVELOPING → PEAK → DECAYING → DYING`.
+- 2 Arduino Uno boards;
+- 2 WS2812B strips with 60 LEDs each;
+- 120 LEDs in total;
+- D7 for strip A and D8 for strip B;
+- 12 V / 3.33 A power supply;
+- LM2596S adjusted to approximately 5.02 V;
+- logical paths separated from the physical LED positions;
+- intensity, duration, propagation, branching, and multiple peaks;
+- storm lifecycle: `SILENCE → RISING → DEVELOPING → PEAK → DECAYING → DYING`.
 
-Um detalhe importante do projeto é que **o silêncio também faz parte do efeito**. Uma tempestade convincente não deve produzir relâmpagos continuamente.
+An important detail is that **silence is also part of the effect**. A convincing storm should not produce lightning continuously.
 
-No Arthuween 2026, o sistema foi usado em uma nuvem cenográfica e ultrapassou **25.000 CPM (Caralhos Por Minuto)**, segundo o relato após o evento.
+During Arthuween 2026, the system was used inside a scenic cloud and exceeded **25,000 CPM (Caralhos Por Minuto)**, according to the report after the event.
 
-➡️ [Documentação do Lightning Engine](relampagos/README.md)
+➡️ [Lightning Engine documentation](relampagos/README.md)
 
-## 💀 Maria Joaquina — olhos da caveira
+## 💀 Maria Joaquina — Skull Eyes
 
-A caveira recebeu dois displays circulares GC9A01 de aproximadamente 1,28", controlados por um ESP32-S3.
+The skull received two approximately 1.28" circular GC9A01 displays controlled by an ESP32-S3.
 
-Os olhos são construídos **proceduralmente**. Não são animações feitas com uma sequência de imagens.
+The eyes are built **procedurally**. They are not animations made from a sequence of images.
 
-A composição visual é formada por:
+The visual composition consists of:
 
-- esclera;
-- anel externo;
-- íris;
-- pupila.
+- sclera;
+- outer ring;
+- iris;
+- pupil.
 
-Durante o movimento, a unidade que se desloca é a **íris inteira** — anel + íris + pupila. A pupila permanece centralizada dentro da íris.
+During movement, the unit that moves is the **entire iris** — ring + iris + pupil. The pupil remains centered within the iris.
 
-A versão funcional de referência é o:
+The functional reference version is:
 
 **POC-KAME-EYE-002C — IRIS GAZE + NUMB / LIFELESS**
 
-Essa versão é mantida como baseline congelado porque foi a última versão comprovadamente funcional com os dois olhos.
+This version is kept as the frozen baseline because it was the last version proven to work with both eyes.
 
-➡️ [Documentação dos olhos](olhos-caveira/README.md)
+➡️ [Skull eyes documentation](olhos-caveira/README.md)
 
-## 🧪 Como o projeto foi desenvolvido
+## 🧪 How the project was developed
 
-O processo adotado foi deliberadamente experimental:
+The process was deliberately experimental:
 
-`POC → teste visual → validação técnica → montagem → evento real → reação humana → validação da experiência`
+`POC → visual test → technical validation → assembly → real-world event → human reaction → experience validation`
 
-Versões validadas não devem ser alteradas diretamente. Uma alteração deve gerar uma nova versão.
+Validated versions should not be modified directly. Any change should result in a new version.
 
 ## 🏠 Arthuween 2026
 
-Além dos dois sistemas eletrônicos, a cenografia utilizou projeções em loop de fantasmas, zumbis e outros conteúdos sobrenaturais em uma janela voltada para o corredor lateral. As luzes do corredor foram apagadas para melhorar o contraste.
+In addition to the two electronic systems, the scenery used looping projections of ghosts, zombies, and other supernatural content in a window facing the side corridor. The corridor lights were turned off to improve contrast.
 
-O resultado combinou:
+The result combined:
 
-**relâmpagos + Maria Joaquina + projeções + escuridão + surpresa + comportamento procedural.**
+**lightning + Maria Joaquina + projections + darkness + surprise + procedural behavior.**
 
-## 📚 Estrutura
+## 📚 Structure
 
 ```
 relampagos/
@@ -87,13 +87,13 @@ docs/
   ARTHUWEEN-2026.md
 ```
 
-## ⚠️ Observações
+## ⚠️ Notes
 
-Os códigos são registros de versões de desenvolvimento e validação de um projeto cenográfico. Componentes, alimentação, corrente e montagem física devem ser dimensionados e verificados antes de qualquer reprodução.
+The code files are records of development and validation versions of a scenic project. Components, power supply, current requirements, and physical construction must be properly sized and verified before reproducing any part of the project.
 
-## 🎃 Resultado
+## 🎃 Result
 
-O Arthuween deixou de ser apenas uma coleção de POCs e se tornou um experimento completo envolvendo **engenharia, cenografia, software, hardware, comportamento procedural e experiência humana**.
+Arthuween evolved from a collection of POCs into a complete experiment involving **engineering, scenery, software, hardware, procedural behavior, and human experience**.
 
 ---
 
