@@ -1,32 +1,32 @@
 # ⚡ Lightning Engine
 
-## O que é?
+## What is it?
 
-O Lightning Engine é um simulador de tempestade para fitas de LEDs endereçáveis WS2812B.
+The Lightning Engine is a storm simulator for WS2812B addressable LED strips.
 
-A ideia central foi simples:
+The central idea was simple:
 
-> Não queremos fazer LEDs piscarem. Queremos fazer uma tempestade parecer viva.
+> We don't want to make LEDs blink. We want to make a storm feel alive.
 
-Por isso, o sistema possui uma noção de **tempo**, **intensidade**, **desenvolvimento da tempestade** e **personalidade de cada descarga**.
+For that reason, the system models **time**, **intensity**, **storm development**, and the **personality of each strike**.
 
-## Hardware validado
+## Validated hardware
 
 - Arduino Uno
-- 2 × WS2812B, 60 LEDs cada
-- 120 LEDs no total
-- D7 → fita A
-- D8 → fita B
-- Fonte de 12 V / 3,33 A
-- LM2596S ajustado para aproximadamente 5,02 V
-- Fitas instaladas aproximadamente a 2,8 m de altura
-- Algodão/enchimento usado como material difusor para formar a nuvem
+- 2 × WS2812B, 60 LEDs each
+- 120 LEDs total
+- D7 → strip A
+- D8 → strip B
+- 12 V / 3.33 A power supply
+- LM2596S adjusted to approximately 5.02 V
+- Strips installed approximately 2.8 m above the ground
+- Cotton/fiber filling used as a diffuser to form the cloud
 
-As duas fitas são tratadas como entidades independentes. Isso permite criar ramificações e fazer a descarga passar de uma região lógica para outra.
+The two strips are treated as independent entities. This allows branches to be created and a discharge to move from one logical region to another.
 
-## Como a tempestade funciona
+## How the storm works
 
-A tempestade possui estados:
+The storm has states:
 
 ```
 SILENCE
@@ -44,124 +44,124 @@ DYING
 SILENCE
 ```
 
-O estado **SILENCE** é proposital.
+The **SILENCE** state is intentional.
 
-Uma tempestade que pisca o tempo inteiro deixa de parecer uma tempestade e passa a parecer um efeito de iluminação.
+A storm that flashes continuously stops looking like a storm and starts looking like a lighting effect.
 
-## Cada relâmpago tem personalidade
+## Every lightning strike has a personality
 
-Uma descarga pode variar em:
+A discharge can vary in:
 
-- intensidade;
-- duração;
-- tempo de propagação;
-- direção;
-- ramificação;
-- persistência;
-- curva de intensidade;
-- número de picos.
+- intensity;
+- duration;
+- propagation time;
+- direction;
+- branching;
+- persistence;
+- intensity curve;
+- number of peaks.
 
-As curvas utilizadas incluem:
+The curves used include:
 
-- **Explosive** — começa forte e desaparece;
-- **Growing** — cresce progressivamente;
-- **Peaked** — cresce, chega a um pico e decai;
-- **Multi-peak** — possui mais de um pico.
+- **Explosive** — starts strong and fades;
+- **Growing** — progressively increases;
+- **Peaked** — grows, reaches a peak, and decays;
+- **Multi-peak** — contains more than one peak.
 
-Nas tempestades fortes, a distribuição utilizada foi:
+For strong storms, the distribution used was:
 
-- 18% explosiva;
-- 14% crescente;
-- 44% com pico;
-- 24% multi-pico.
+- 18% explosive;
+- 14% growing;
+- 44% peaked;
+- 24% multi-peak.
 
-## Propagação
+## Propagation
 
-Foram testados vários tempos entre pontos sucessivos da descarga:
+Several timings between successive points of a discharge were tested:
 
-| Propagação | Resultado observado |
+| Propagation | Observed result |
 |---:|---|
-| 35/25 ms | discreto |
+| 35/25 ms | subtle |
 | 10 ms | flash |
-| 5 ms | muito bom |
-| 0 ms | intenso |
-| 0–10 ms aleatório | validado |
+| 5 ms | very good |
+| 0 ms | intense |
+| random 0–10 ms | validated |
 
-A escolha aleatória entre 0 e 10 ms ajudou a evitar que todas as descargas apresentassem exatamente o mesmo comportamento.
+Random selection between 0 and 10 ms helped prevent every discharge from behaving exactly the same way.
 
-## Potência
+## Power
 
-O limite teórico de 120 LEDs em branco a 60 mA seria:
+The theoretical limit for 120 LEDs at 60 mA in full white would be:
 
-`120 × 60 mA = 7,2 A`
+`120 × 60 mA = 7.2 A`
 
-Isso é superior à capacidade do conjunto de alimentação utilizado.
+This exceeds the capacity of the power system used.
 
-Por isso, o firmware trabalha com:
+Therefore, the firmware uses:
 
-- efeitos esparsos;
-- brilho variável;
-- limite de potência;
-- flashes localizados.
+- sparse effects;
+- variable brightness;
+- a power limit;
+- localized flashes.
 
-O limite de software usado no firmware é de aproximadamente **2400 mA**, equivalente a cerca de 40 LEDs em branco total.
+The software limit used by the firmware is approximately **2400 mA**, equivalent to about 40 LEDs at full white.
 
-### Alimentação
+### Power supply
 
 ```
-12 V / 3,33 A
+12 V / 3.33 A
        │
        ▼
     LM2596S
        │
-     5,02 V
+     5.02 V
        │
        ├── Arduino Uno 5V
        │
-       └── VCC das duas WS2812B
+       └── VCC of both WS2812B strips
 
-GND comum entre Arduino e fitas
+Common GND between Arduino and strips
 ```
 
-**Importante:** os 5 V regulados são aplicados ao pino 5V do Uno, não ao barrel/DC jack.
+**Important:** the regulated 5 V is applied to the Uno's 5V pin, not to the barrel/DC jack.
 
-## Resultado real
+## Real-world result
 
-O sistema foi instalado em uma nuvem cenográfica e funcionou durante o evento Arthuween 2026.
+The system was installed inside a scenic cloud and operated during Arthuween 2026.
 
-O teste deixou de ser apenas de bancada: houve validação em ambiente real, diante de público.
+The test was no longer limited to the bench: it was validated in a real environment, in front of an audience.
 
-Resultado relatado:
+Reported result:
 
-**mais de 25.000 CPM.**
+**more than 25,000 CPM.**
 
-## O que aprendemos
+## What we learned
 
-### 1. O difusor importa
+### 1. The diffuser matters
 
-A distância entre os LEDs e o material difusor influencia muito a sobreposição das emissões.
+The distance between the LEDs and the diffuser strongly affects how the emitted light overlaps.
 
-O enchimento de algodão/tecido funcionou muito bem.
+Cotton/fiber filling worked very well.
 
-### 2. A aleatoriedade precisa de estrutura
+### 2. Randomness needs structure
 
-Aleatoriedade pura não produz necessariamente um fenômeno convincente.
+Pure randomness does not necessarily produce a convincing phenomenon.
 
-O sistema usa aleatoriedade dentro de regras: estado da tempestade, intensidade, curvas, intervalos e probabilidade de ramificação.
+The system uses randomness within rules: storm state, intensity, curves, intervals, and branching probability.
 
-### 3. O silêncio é parte do efeito
+### 3. Silence is part of the effect
 
-Talvez essa tenha sido uma das descobertas mais importantes.
+This was perhaps one of the most important discoveries.
 
-A ausência de relâmpagos também comunica que existe uma tempestade acontecendo.
+The absence of lightning also communicates that a storm is happening.
 
-## Código
+## Code
 
-A versão registrada neste repositório é:
+The version registered in this repository is:
 
 `Lightning_Simulator_v0_3_Tempestades_Intensas.ino`
 
-Ela preserva a versão que contém o comportamento de tempestades intensas utilizado durante os testes finais.
+It preserves the version containing the strong-storm behavior used during the final tests.
 
 ---
 
